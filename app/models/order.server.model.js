@@ -19,10 +19,21 @@ var trackingSchema = new Schema({
 });
 
 var shippingSchema = new Schema({
-     user: {
-      type: Schema.ObjectId,
-      ref: 'User'
-    },
+     street: {
+      type: String,
+      default: ''
+     },
+     city: {
+      type: String,
+      default: ''
+     },
+     state: {
+      type: String,
+      default: ''
+     },
+     zip: {
+      type: Number,
+     },
     tracking: [trackingSchema]
 });
 
@@ -37,12 +48,20 @@ var paymentSchema = new Schema({
     }
 });
 
-var checkoutSchema = new Schema({
+var orderSchema = new Schema({
     created: {
       type: Date,
       default: Date.now
     },
+    user: {
+      type: Schema.ObjectId,
+      ref: 'User'
+    },
+    state: {
+      type: String,
+      default: ''
+    }
     shipping: [shippingSchema]
 });
 
-mongoose.model('Order', checkoutSchema);
+mongoose.model('Order', orderSchema);
