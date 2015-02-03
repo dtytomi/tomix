@@ -48,6 +48,10 @@ var paymentSchema = new Schema({
     }
 });
 
+var productSchema = new Schema({
+  sku: {} ,
+});
+
 var orderSchema = new Schema({
     created: {
       type: Date,
@@ -60,8 +64,10 @@ var orderSchema = new Schema({
     state: {
       type: String,
       default: ''
-    }
+    },
+    line_items: [productSchema],
     shipping: [shippingSchema]
+
 });
 
 mongoose.model('Order', orderSchema);
