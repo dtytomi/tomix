@@ -49,7 +49,18 @@ var paymentSchema = new Schema({
 });
 
 var productSchema = new Schema({
-  sku: {} ,
+  sku: {
+    type: String,
+    default: ''
+  },
+  name: {
+    type: String,
+    default: ''
+  },
+  retail_price: {
+    type: Number,
+    min: 0
+  }
 });
 
 var orderSchema = new Schema({
