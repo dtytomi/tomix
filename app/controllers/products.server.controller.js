@@ -7,6 +7,15 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
   var product = new Product(req.body);
 
+  var category = req.body.category;
+  product.categories.unshift(category);
+
+  var image = {
+    kind: req.body.kind,
+    url: req.body.url
+  };
+  product.images.unshift(image);
+
   product.save(function(err) {
     if (err) {
 

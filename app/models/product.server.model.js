@@ -16,7 +16,8 @@ var Images = new Schema({
 });
 
 var Category = new Schema({
-  type: String
+  type: String,
+  default: ''
 });
 
 var productSchema = new Schema({
@@ -24,7 +25,7 @@ var productSchema = new Schema({
     type: Date,
     default : Date.now
   },
-  title: {
+  name: {
     type: String,
     default: ''
   },

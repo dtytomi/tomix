@@ -8,10 +8,19 @@ var passport = require('passport');
 module.exports = function(app) {
 	// User Routes
 	var users = require('../../app/controllers/users');
+	
 	app.route('/users/me').get(users.me);
 	app.route('/users').put(users.update);
 	app.route('/users/password').post(users.changePassword);
 	app.route('/users/accounts').delete(users.removeOAuthProvider);
+
+	// Setting up the Admin api
+	app.route('/auth/admin_signup').post(users.signup);
+	app.route('/auth/admin_signin').post(users.signin);
+	app.route('/auth/admin_signout').get(users.signout);
+
+	app.route('/admin').put(users.update);
+
 
 	// Setting up the users api
 	app.route('/auth/signup').post(users.signup);

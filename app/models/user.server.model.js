@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
+	extend = require('mongoose-schema-extend'),
 	crypto = require('crypto');
 
 /**
@@ -82,6 +83,33 @@ var UserSchema = new Schema({
 		type: Date,
 		default: Date.now
 	}
+}, {collection: 'users', discriminatorkey: '_type'});
+
+
+var AdminSchema = UserSchema.extend({
+	roles: {
+		type: String,
+		default: 'admin'
+	}
+});
+
+var ConsumerSchema = UserSchema.extend({
+		address: {
+			type: String,
+			default: ''
+		},
+		city: {
+			type: String,
+			default: ''
+		},
+		state: {
+			type: String,
+			default: ''
+		},
+		zip: {
+			type: String,
+			default: ''
+		}
 });
 
 /**
@@ -136,4 +164,6 @@ UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
 	});
 };
 
-mongoose.model('User', UserSchema);
+var User = mongoose.model('User', UserSchema),
+		Admin = mongoose.model('Admin', AdminSchema),
+		Consumer = mongoose.model('Consumer', ConsumerSchema);

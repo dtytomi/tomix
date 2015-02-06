@@ -1,18 +1,22 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Order = mongoose.Schema,
+    Order = mongoose.model('Order'),
     _ = require('lodash');
 
 exports.addToCart = function(req, res) {
-  var order = new Order(req.body.state);
+  console.log('the whole body', req.body);
+  console.log('state', req.body.state);
+  var order = new Order({
+      state: req.body.state
+  });
   var goods = {
         sku: req.body.sku,
         name: req.body.name,
         retail_price: req.body.price
   };
 
-  order.line_item.unshift(goods);
+  order.line_items.unshift(goods);
 
   order.save(function(err){
     if(err) {
