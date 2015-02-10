@@ -6,6 +6,8 @@
 var mongoose = require('mongoose'),
 	passport = require('passport'),
 	User = mongoose.model('User'),
+	Admin = mongoose.model('Admin'),
+	Consumer = mongoose.model('Consumer'),
 	_ = require('lodash');
 
 /**
@@ -36,11 +38,18 @@ var getErrorMessage = function(err) {
  * Signup
  */
 exports.signup = function(req, res) {
-	// For security measurement we remove the roles from the req.body object
-	delete req.body.roles;
 	
+	var user,
+			roles = req.body.roles;
+	
+	if(roles === 'admin'){
+		user = new Admin(req.body);
+
+	} else if (roles === 'user') {
+
+		user = new Consumer(req.body);
+	}
 	// Init Variables
-	var user = new User(req.body);
 	var message = null;
 
 	// Add missing user fields

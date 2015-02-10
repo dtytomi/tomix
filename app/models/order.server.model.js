@@ -68,17 +68,16 @@ var orderSchema = new Schema({
       type: Date,
       default: Date.now
     },
-    user: {
-      type: Schema.ObjectId,
-      ref: 'User'
-    },
     state: {
       type: String,
       default: ''
     },
     line_items: [productSchema],
-    shipping: [shippingSchema]
-
+    shipping: [shippingSchema],
+    user: {
+      type: Schema.ObjectId,
+      ref: 'Consumer'
+    }
 });
 
 mongoose.model('Order', orderSchema);

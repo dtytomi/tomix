@@ -16,7 +16,10 @@ var Images = new Schema({
 });
 
 var Category = new Schema({
-  type: String
+    category_name: {
+      type: String,
+      default: '' 
+    }
 });
 
 var productSchema = new Schema({
@@ -24,7 +27,7 @@ var productSchema = new Schema({
     type: Date,
     default : Date.now
   },
-  title: {
+  name: {
     type: String,
     default: ''
   },
@@ -44,7 +47,11 @@ var productSchema = new Schema({
     type: String
   },
   categories: [Category],
-  images: [Images]
+  images: [Images],
+  user: {
+    type: Schema.ObjectId,
+    ref: 'Admin'
+  }
 });
 
 mongoose.model('Product', productSchema);
