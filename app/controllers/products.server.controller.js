@@ -1,14 +1,17 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Product = mongoose.model('Product'),
+    Product = mongoose.model('Product'),        
      _ = require('lodash');
 
 exports.create = function(req, res) {
   var product = new Product(req.body);
+      product.user = req.user;
 
-  var category = req.body.category;
-  product.categories.unshift(category);
+  var category = {
+    category_name: req.body.category_name
+  };
+     product.categories.unshift(category);
 
   var image = {
     kind: req.body.kind,
@@ -83,4 +86,11 @@ exports.productById = function(req, res, next, id) {
     req.product = product;
     next();
   });
+};
+
+exports.hasAuthourization = function(req, res, next){
+  if( req.product.user.id !== req.user.id){
+    return res.send(403, 'User is not Authourized');
+  }
+  next();
 };

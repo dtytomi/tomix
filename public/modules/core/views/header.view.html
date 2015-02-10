@@ -1,0 +1,37 @@
+<div data-ng-controller="HeaderController" class="container">
+    <a href="/#!/" id="logo">
+        <img src="modules/core/css/img/mblogo.jpg">
+    </a>
+    <nav>
+       <a href="#" id="menu-icon"></a>
+        <ul data-ng-hide="authentication.user">
+            <li><a href="#!/">Home</a></li>
+            <li><a href="#!/aboutus">About</a></li>
+            <li><a href="#!/services">Services</a></li>
+            <li><a href="#!/greentech">Green Tech</a></li>
+            <li><a href="#!/contact">Contact</a></li>
+        </ul>
+        <ul data-ng-show="authentication.user">
+            <li><img ng-src={{user.profilePics}}>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span data-ng-bind="authentication.user.displayName"></span> <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/#!/settings/profile">Edit Profile</a>
+                    </li>
+                    <li>
+                        <a href="/#!/settings/accounts">Manage Social Accounts</a>
+                    </li>
+                    <li data-ng-show="authentication.user.provider === 'local'">
+                        <a href="/#!/settings/password">Change Password</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/auth/signout">Signout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

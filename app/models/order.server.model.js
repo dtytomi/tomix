@@ -73,7 +73,11 @@ var orderSchema = new Schema({
       default: ''
     },
     line_items: [productSchema],
-    shipping: [shippingSchema]
+    shipping: [shippingSchema],
+    user: {
+      type: Schema.ObjectId,
+      ref: 'Consumer'
+    }
 });
 
 mongoose.model('Order', orderSchema);
