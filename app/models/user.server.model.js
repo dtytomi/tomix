@@ -5,7 +5,6 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
-	extend = require('mongoose-schema-extend'),
 	crypto = require('crypto');
 
 /**
@@ -83,33 +82,6 @@ var UserSchema = new Schema({
 		type: Date,
 		default: Date.now
 	}
-}, {collection: 'users', discriminatorkey: '_type'});
-
-
-var AdminSchema = UserSchema.extend({
-	roles: {
-		type: String,
-		default: 'admin'
-	}
-});
-
-var ConsumerSchema = UserSchema.extend({
-		address: {
-			type: String,
-			default: ''
-		},
-		city: {
-			type: String,
-			default: ''
-		},
-		state: {
-			type: String,
-			default: ''
-		},
-		zip: {
-			type: String,
-			default: ''
-		}
 });
 
 /**
@@ -117,24 +89,6 @@ var ConsumerSchema = UserSchema.extend({
  */
 UserSchema.pre('save', function(next) {
 	if (this.password && this.password.length > 6) {
-		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-		this.password = this.hashPassword(this.password);
-	}
-
-	next();
-});
-
-AdminSchema.pre('save', function(next) {
-	if(this.password && this.password.length > 6) {
-		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-		this.password = this.hashPassword(this.password);
-	}
-
-	next();
-});
-
-ConsumerSchema.pre('save', function(next) {
-	if(this.password && this.password.length > 6) {
 		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
 		this.password = this.hashPassword(this.password);
 	}
@@ -153,22 +107,6 @@ UserSchema.methods.hashPassword = function(password) {
 	}
 };
 
-AdminSchema.methods.hashPassword = function(password) {
-	if (this.salt && password) {
-		return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
-	} else {
-		return password;
-	}
-};
-
-ConsumerSchema.methods.hashPassword = function(password) {
-	if (this.salt && password) {
-		return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
-	} else {
-		return password;
-	}
-};
-
 /**
  * Create instance method for authenticating user
  */
@@ -176,14 +114,6 @@ UserSchema.methods.authenticate = function(password) {
 	return this.password === this.hashPassword(password);
 };
 
-AdminSchema.methods.authenticate = function(password) {
-	return this.password === this.hashPassword(password);
-};
-
-ConsumerSchema.methods.authenticate = function(password) {
-	return this.password === this.hashPassword(password);
-};
-	
 /**
  * Find possible not used username
  */
@@ -206,44 +136,4 @@ UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
 	});
 };
 
-AdminSchema.statics.findUniqueUsername = function(username, suffix, callback) {
-	var _this = this;
-	var possibleUsername = username + (suffix || '');
-
-	_this.findOne({
-		username: possibleUsername
-	}, function(err, user) {
-		if (!err) {
-			if (!user) {
-				callback(possibleUsername);
-			} else {
-				return _this.findUniqueUsername(username, (suffix || 0) + 1, callback);
-			}
-		}else {
-			callback(null);
-		}
-	});
-};
-
-ConsumerSchema.statics.findUniqueUsername = function(username, suffix, callback) {
-	var _this = this;
-	var possibleUsername = username + (suffix || '');
-
-	_this.findOne({
-		username: possibleUsername
-	}, function(err, user) {
-		if (!err) {
-			if (!user) {
-				callback(possibleUsername);
-			} else {
-				return _this.findUniqueUsername(username, (suffix || 0) + 1, callback);
-			}
-		} else {
-			callback(null);
-		}
-	});
-};
-
-var User = mongoose.model('User', UserSchema),
-		Admin = mongoose.model('Admin', AdminSchema),
-		Consumer = mongoose.model('Consumer', ConsumerSchema);
+mongoose.model('User', UserSchema);

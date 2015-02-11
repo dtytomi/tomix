@@ -49,18 +49,7 @@ var paymentSchema = new Schema({
 });
 
 var productSchema = new Schema({
-  sku: {
-    type: String,
-    default: ''
-  },
-  name: {
-    type: String,
-    default: ''
-  },
-  retail_price: {
-    type: Number,
-    min: 0
-  }
+  sku: {} ,
 });
 
 var orderSchema = new Schema({
@@ -68,16 +57,17 @@ var orderSchema = new Schema({
       type: Date,
       default: Date.now
     },
+    user: {
+      type: Schema.ObjectId,
+      ref: 'User'
+    },
     state: {
       type: String,
       default: ''
     },
     line_items: [productSchema],
-    shipping: [shippingSchema],
-    user: {
-      type: Schema.ObjectId,
-      ref: 'Consumer'
-    }
+    shipping: [shippingSchema]
+
 });
 
 mongoose.model('Order', orderSchema);
